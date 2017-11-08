@@ -1,0 +1,13 @@
+server:
+  port: 8100
+
+# 监听端口和保存路径
+image:
+  io:
+    savePath: /Users/holmes1214/Desktop/
+# 日志设定
+logging:
+  level:
+    com.sagacn: DEBUG
+  config: classpath:logback-dev.xml
+  

@@ -1,0 +1,12 @@
+server:
+  port: 8090
+
+# 监听端口和保存路径
+image:
+  io:
+    savePath: /var/image
+# 日志设定
+logging:
+  level:
+    com.sagacn: INFO
+  config: classpath:logback-prod.xml
