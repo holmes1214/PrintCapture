@@ -1,0 +1,77 @@
+.common {
+    position: absolute;
+    scroll:no;
+}
+
+.top {
+    top: 0;
+    left: 0;
+    width: 1620px;
+    height: 1080px;
+}
+
+.bottom {
+    top: 0;
+    left: 1620px;
+    width: 300px;
+    height: 1080px;
+}
+
+.options {
+    top: 0;
+    left: 1590px;
+    width: 330px;
+    height: 1080px;
+}
+
+.full {
+    top: 0;
+    left: 0;
+    width: 1920px;
+    height: 1080px;
+}
+
+.frame-button {
+    left: 730px;
+    top: 48px;
+    width:117px;
+    height:117px;
+}
+
+.capture-button {
+    left: 900px;
+    top: 48px;
+    width:117px;
+    height:117px;
+}
+
+.countdown {
+    left: 540px;
+    top: 154px;
+    width:716px;
+    height:772px;
+}
+.option{
+    width: 270px;
+    height: 180px;
+    background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;
+}
+.img-back{background-image: url("../img/back.png")}
+.img-bottom{background-image: url("../img/bottom.png")}
+.img-cover{background-image: url("../img/front1.png")}
+.img-options{background-image: url("../img/options.png")}
+.img-option1{background-image: url("../img/front1.png"); position: relative;  top: 70px; left: 30px}
+.img-option2{background-image: url("../img/front2.png");position: relative;  top: 142px; left: 30px}
+.img-option3{background-image: url("../img/front3.png");position: relative;  top: 216px; left: 30px}
+.img-option4{background-image: url("../img/front4.png");position: relative;  top: 290px; left: 30px}
+.img-frame-button{background-image: url("../img/frame.png")}
+.img-capture-button{background-image: url("../img/capture.png")}
+.img-frame-button:active{background-image: url("../img/frame-active.png")}
+.img-capture-button:active{background-image: url("../img/capture-active.png")}
+.visible{ display: block}
+.invisible{ display: none}
+.sequence-1{  z-index: 1;  }
+.sequence-2{  z-index: 2;  }
+.sequence-3{  z-index: 3;  }
+.sequence-4{  z-index: 4;  }
+.sequence-5{  z-index: 5;  }
