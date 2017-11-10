@@ -5,10 +5,10 @@ server:
 # 监听端口和保存路径
 image:
   io:
-    originImagePath: c:/origin/
-    combinedImagePath: c:/combined/
-    printedImagePath: c:/printed/
-    backgroundImagePath: c:/background/
+    originImagePath: c:/pictures/origin/
+    combinedImagePath: c:/pictures/combined/
+    printedImagePath: c:/pictures/printed/
+    backgroundImagePath: c:/pictures/background/
 # 日志设定
 logging:
   level:

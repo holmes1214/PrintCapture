@@ -10,6 +10,10 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import javax.imageio.ImageIO;
 import javax.print.*;
@@ -22,9 +26,12 @@ import javax.print.attribute.standard.MediaPrintableArea;
 import javax.print.attribute.standard.OrientationRequested;
 import javax.print.attribute.standard.PrintQuality;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 /**
  * Created by holmes1214 on 08/11/2017.
@@ -32,17 +39,17 @@ import java.io.FileInputStream;
 public class PrintUtil {
     private static Logger logger = LoggerFactory.getLogger(PrintUtil.class);
 
-    public static boolean printImage(File file){
-
+    public static boolean printImage(File file) {
+        FileInputStream fin=null;
         try {
-            DocFlavor dof = DocFlavor.INPUT_STREAM.JPEG;
+            DocFlavor dof = DocFlavor.INPUT_STREAM.PNG;
 
             PrintService[] printServices = PrintServiceLookup.lookupPrintServices(dof, null);
             PrintService ps = null;
-            if (printServices!=null&&printServices.length>0){
-                ps=printServices[0];
-            }else {
-                ps=PrintServiceLookup.lookupDefaultPrintService();
+            if (printServices != null && printServices.length > 0) {
+                ps = printServices[0];
+            } else {
+                ps = PrintServiceLookup.lookupDefaultPrintService();
             }
 
             PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
@@ -51,67 +58,97 @@ public class PrintUtil {
             pras.add(new Copies(1));
             pras.add(PrintQuality.HIGH);
             DocAttributeSet das = new HashDocAttributeSet();
-
             // 设置打印纸张的大小（以毫米为单位）
             das.add(new MediaPrintableArea(0, 0, 102, 152, MediaPrintableArea.MM));
-            FileInputStream fin = new FileInputStream(file);
-
+            fin = new FileInputStream(file);
             Doc doc = new SimpleDoc(fin, dof, das);
-
             DocPrintJob job = ps.createPrintJob();
-
             job.print(doc, pras);
-            fin.close();
         } catch (Exception ie) {
-            logger.error(ie.getMessage(),ie);
+            logger.error(ie.getMessage(), ie);
             return false;
+        }finally {
+            if (fin!=null){
+                try {
+                    fin.close();
+                } catch (IOException e) {
+                }
+            }
         }
         return true;
     }
 
-    public static String combine(String combinedPath, String savePath,String backgroundPath, String fileName,String back) {
-
+    public static String combine(String combinedPath, String savePath, String backgroundPath, String fileName, String back) {
         try {
-            BufferedImage big = ImageIO.read(new File(savePath+fileName));
-            BufferedImage small = ImageIO.read(new File(backgroundPath+back+".png"));
+            BufferedImage big = ImageIO.read(new File(savePath + fileName));
+            BufferedImage small = ImageIO.read(new File(backgroundPath + back + ".png"));
+
             Graphics2D g = big.createGraphics();
-            int x = (big.getWidth() - small.getWidth()) / 2;
-            int y = (big.getHeight() - small.getHeight()) / 2;
-            g.drawImage(small, 0, 0, 1620,1080, null);
+
+            g.drawImage(small, 0, 0, 1620, 1080, null);
             g.dispose();
-            String outFile=combinedPath+fileName;
+            String outFile = combinedPath + fileName;
+            big = rotateImage(big, 90, null);
             ImageIO.write(big, "png", new File(outFile));
-            CloseableHttpClient httpclient = HttpClients.createDefault();
-            try {
-                HttpPost httppost = new HttpPost("http://suspnp.com/snap/upload");
-
-                FileBody bin = new FileBody(new File(outFile));
-
-                HttpEntity reqEntity = MultipartEntityBuilder.create()
-                        .addPart("bin", bin)
-                        .build();
-
-
-                httppost.setEntity(reqEntity);
-
-                CloseableHttpResponse response = httpclient.execute(httppost);
-                try {
-                    logger.info("upload status:{}",response.getStatusLine());
-                    HttpEntity resEntity = response.getEntity();
-                    if (resEntity != null) {
-                        String result = EntityUtils.toString(resEntity);
-                        return result;
-                    }
-                    EntityUtils.consume(resEntity);
-                } finally {
-                    response.close();
-                }
-            } finally {
-                httpclient.close();
-            }
+            String url = "http://suspnp.com/snap/upload";
+            RestTemplate rest = new RestTemplate();
+            FileSystemResource resource = new FileSystemResource(new File(outFile));
+            MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
+            param.add("file", resource);
+            String result = rest.postForObject(url, param, String.class);
+            return result;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return combinedPath;
+    }
+
+    public static BufferedImage rotateImage(final BufferedImage image,
+                                            int degree, Color bgcolor) {
+        int iw = image.getWidth();// 原始图象的宽度
+        int ih = image.getHeight();// 原始图象的高度
+        int w = 0;
+        int h = 0;
+        int x = 0;
+        int y = 0;
+        degree = degree % 360;
+        if (degree < 0)
+            degree = 360 + degree;// 将角度转换到0-360度之间
+        double ang = Math.toRadians(degree);// 将角度转为弧度
+
+        /**
+         * 确定旋转后的图象的高度和宽度
+         */
+
+        if (degree == 180 || degree == 0 || degree == 360) {
+            w = iw;
+            h = ih;
+        } else if (degree == 90 || degree == 270) {
+            w = ih;
+            h = iw;
+        } else {
+            int d = iw + ih;
+            w = (int) (d * Math.abs(Math.cos(ang)));
+            h = (int) (d * Math.abs(Math.sin(ang)));
+        }
+
+        x = (w / 2) - (iw / 2);// 确定原点坐标
+        y = (h / 2) - (ih / 2);
+        BufferedImage rotatedImage = new BufferedImage(w, h, image.getType());
+        Graphics2D gs = (Graphics2D) rotatedImage.getGraphics();
+        if (bgcolor == null) {
+            rotatedImage = gs.getDeviceConfiguration().createCompatibleImage(w,
+                    h, Transparency.OPAQUE);
+        } else {
+            gs.setColor(bgcolor);
+            gs.fillRect(0, 0, w, h);// 以给定颜色绘制旋转后图片的背景
+        }
+        gs.dispose();
+        AffineTransform at = new AffineTransform();
+        at.rotate(ang, w / 2, h / 2);// 旋转图象
+        at.translate(x, y);
+        AffineTransformOp op = new AffineTransformOp(at,
+                AffineTransformOp.TYPE_BICUBIC);
+        op.filter(image, rotatedImage);
+        return rotatedImage;
     }
 }

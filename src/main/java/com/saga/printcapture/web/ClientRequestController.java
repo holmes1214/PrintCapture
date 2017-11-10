@@ -1,5 +1,6 @@
 package com.saga.printcapture.web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.saga.printcapture.util.PrintUtil;
 import com.sun.deploy.net.HttpResponse;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.Base64;
@@ -35,6 +37,22 @@ public class ClientRequestController {
 	@Value("${image.io.backgroundImagePath}")
 	private String backgroundPath;
 
+	@PostConstruct
+	public void init(){
+		File f1=new File(savePath);
+		if (!f1.exists()){
+			f1.mkdirs();
+		}
+		f1=new File(combinedPath);
+		if (!f1.exists()){
+			f1.mkdirs();
+		}
+		f1=new File(printedPath);
+		if (!f1.exists()){
+			f1.mkdirs();
+		}
+	}
+
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public @ResponseBody  Object request(@RequestParam("imageData") MultipartFile image,@RequestParam("backNumber") String backNumber,@RequestParam("suffix") String suffix, HttpServletResponse response) throws Exception {
 		response.setHeader("Access-Control-Allow-Origin", "*");
@@ -44,11 +62,11 @@ public class ClientRequestController {
 		String fileName=UUID.randomUUID().toString()+suffix;
 		File dest = new File(savePath + fileName);
 		logger.info("上传的后缀名为：" + fileName);
-		Map<String,String> result=new HashMap<>();
+		Map<String,Object> result=new HashMap<>();
 		try {
 			image.transferTo(dest);
 			String qrCodeUrl=PrintUtil.combine(combinedPath,savePath,backgroundPath,fileName,backNumber);
-			result.put("qrCode",qrCodeUrl);
+			result.put("qrCode", JSONObject.parseObject(qrCodeUrl));
 			result.put("fileName",fileName);
 		} catch (FileNotFoundException e) {
 			logger.error("save error:", e);
@@ -58,7 +76,8 @@ public class ClientRequestController {
 	}
 
 	@RequestMapping(value = "/print", method = RequestMethod.POST)
-	public @ResponseBody  Object request(@RequestParam("fileName") String fileName) throws Exception {
+	public @ResponseBody  Object request(@RequestParam("fileName") String fileName, HttpServletResponse response) throws Exception {
+		response.setHeader("Access-Control-Allow-Origin", "*");
 		if (PrintUtil.printImage(new File(combinedPath+fileName))){
 			return 1;
 		}else {

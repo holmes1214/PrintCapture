@@ -37,6 +37,8 @@ function setNumber(){
         uploadImg();
     }
 }
+
+var fileName="";
 function uploadImg() {
     document.getElementById("image-layer").toBlob(function (blob) {
         console.log(blob.size)
@@ -53,14 +55,50 @@ function uploadImg() {
             contentType: false,
             success: function (msg) {
                 console.log(msg);
+                if(msg.qrCode.meta.code==0){
+                    $("#qrcode-layer").show();
+                    var url=msg.qrCode.data;
+                    $("#qr-code").css("background-image","url('"+url+"')");
+                    fileName=msg.fileName;
+                }else {
+                }
             },
             error: function (a,b,c) {
                 console.log(c);
             }
         });
     });
-
 }
+$(document).on("click","#return-to-capture",function () {
+    $("#qrcode-layer").fadeOut();
+    $("#image-layer").hide();
+    $("#stream-layer").hide();
+    $("#capture-button-layer").show();
+    $("#frame-button-layer").show();
+});
+
+$(document).on("click","#print-pic",function () {
+    $("#printer-layer").fadeIn();
+    $.ajax({
+        type: 'POST',
+        url:  "http://127.0.0.1:8080/capture/print?fileName="+fileName,
+        crossDomain: true,
+        processData: false,
+        contentType: false,
+        success: function (msg) {
+            console.log(msg);
+            $("#printer-layer").fadeOut();
+            $("#qrcode-layer").fadeOut();
+            $("#image-layer").hide();
+            $("#stream-layer").hide();
+            $("#capture-button-layer").show();
+            $("#frame-button-layer").show();
+        },
+        error: function (a,b,c) {
+            console.log(c);
+        }
+    });
+});
 
 $(document).on("click",".option",function () {
     $("#options-layer").fadeOut();
