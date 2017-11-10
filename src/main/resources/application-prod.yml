@@ -1,10 +1,13 @@
 server:
-  port: 8090
+  port: 8080
 
 # 监听端口和保存路径
 image:
   io:
-    savePath: /var/image
+    originImagePath: c:/origin/
+    combinedImagePath: c:/combined/
+    printedImagePath: c:/printed/
+    backgroundImagePath: c:/background/
 # 日志设定
 logging:
   level:

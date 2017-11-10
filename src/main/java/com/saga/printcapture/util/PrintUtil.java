@@ -3,6 +3,7 @@ package com.saga.printcapture.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import javax.print.*;
 import javax.print.attribute.DocAttributeSet;
 import javax.print.attribute.HashDocAttributeSet;
@@ -12,6 +13,8 @@ import javax.print.attribute.standard.Copies;
 import javax.print.attribute.standard.MediaPrintableArea;
 import javax.print.attribute.standard.OrientationRequested;
 import javax.print.attribute.standard.PrintQuality;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 
@@ -58,7 +61,21 @@ public class PrintUtil {
         return true;
     }
 
-    public static String combine(String combinedPath, String fileName, String s) {
+    public static String combine(String combinedPath, String savePath,String backgroundPath, String fileName,String back) {
+
+        try {
+            BufferedImage big = ImageIO.read(new File(savePath+fileName));
+            BufferedImage small = ImageIO.read(new File(backgroundPath+back+".png"));
+            Graphics2D g = big.createGraphics();
+            int x = (big.getWidth() - small.getWidth()) / 2;
+            int y = (big.getHeight() - small.getHeight()) / 2;
+            g.drawImage(small, 0, 0, 1620,1080, null);
+            g.dispose();
+            String outFile=combinedPath+fileName;
+            ImageIO.write(big, "png", new File(outFile));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return combinedPath;
     }
 }
