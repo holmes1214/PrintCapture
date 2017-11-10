@@ -7,10 +7,10 @@ $(document).on("click","#frame-button-layer",function () {
 });
 
 $(document).on("click","#capture-button-layer",function () {
-    $("#stream-layer").show();
-    $("#capture-button-layer").hide();
-    $("#frame-button-layer").hide();
-    $("#countdown-layer").show();
+    $("#stream-layer").fadeIn();
+    $("#capture-button-layer").fadeOut();
+    $("#frame-button-layer").fadeOut();
+    $("#countdown-layer").fadeIn();
     for(var i=0;i<6;i++){
        setTimeout(setNumber,i*1000);
     }
@@ -19,12 +19,12 @@ var countdown=5;
 function setNumber(){
     if(countdown>0){
         console.log(countdown);
-        $(".countdown").hide();
-        $("#countdown"+countdown+"-layer").show();
+        $(".countdown").fadeOut();
+        $("#countdown"+countdown+"-layer").fadeIn();
         countdown--;
     }else {
-        $(".countdown").hide();
-        $("#image-layer").show();
+        $(".countdown").fadeOut();
+        $("#image-layer").fadeIn();
         var video = document.getElementById("stream-layer");
         var canvas=document.getElementById("image-layer");
         var ctx=canvas.getContext("2d");
@@ -56,7 +56,7 @@ function uploadImg() {
             success: function (msg) {
                 console.log(msg);
                 if(msg.qrCode.meta.code==0){
-                    $("#qrcode-layer").show();
+                    $("#qrcode-layer").fadeIn();
                     var url=msg.qrCode.data;
                     $("#qr-code").css("background-image","url('"+url+"')");
                     fileName=msg.fileName;
@@ -71,10 +71,10 @@ function uploadImg() {
 }
 $(document).on("click","#return-to-capture",function () {
     $("#qrcode-layer").fadeOut();
-    $("#image-layer").hide();
-    $("#stream-layer").hide();
-    $("#capture-button-layer").show();
-    $("#frame-button-layer").show();
+    $("#image-layer").fadeOut();
+    $("#stream-layer").fadeOut();
+    $("#capture-button-layer").fadeIn();
+    $("#frame-button-layer").fadeIn();
 });
 
 $(document).on("click","#print-pic",function () {
@@ -89,10 +89,10 @@ $(document).on("click","#print-pic",function () {
             console.log(msg);
             $("#printer-layer").fadeOut();
             $("#qrcode-layer").fadeOut();
-            $("#image-layer").hide();
-            $("#stream-layer").hide();
-            $("#capture-button-layer").show();
-            $("#frame-button-layer").show();
+            $("#image-layer").fadeOut();
+            $("#stream-layer").fadeOut();
+            $("#capture-button-layer").fadeIn();
+            $("#frame-button-layer").fadeIn();
         },
         error: function (a,b,c) {
             console.log(c);
@@ -103,18 +103,19 @@ $(document).on("click","#print-pic",function () {
 $(document).on("click",".option",function () {
     $("#options-layer").fadeOut();
     backgroundNo=$(this).attr("background-number");
-    $("#cover-layer").css("background-image","'img/front"+backgroundNo+".png'");
+    $(".cover").fadeOut();
+    $("#cover"+backgroundNo+"-layer").fadeIn();
 });
 
 
 
 $(document).ready(function () {
-    $("#cover-layer").css("background-image","url('img/front1.png')");
-
+    $(".cover").fadeOut();
+    $("#cover1-layer").fadeIn();
     for(var i=1;i<6;i++){
-        $("#countdown"+i+"-layer").css("background-image","url('img/"+i+".png')").hide();
+        $("#countdown"+i+"-layer").css("background-image","url('img/"+i+".png')").fadeOut();
     }
-    $("#printer-layer").css("background-image","url('img/printer.png')").hide();
+    $("#printer-layer").css("background-image","url('img/printer.png')").fadeOut();
     var video = document.getElementById("stream-layer");
     var constraints = window.constraints = {
         audio: false,

@@ -82,3 +82,7 @@
 .sequence-3{  z-index: 3;  }
 .sequence-4{  z-index: 4;  }
 .sequence-5{  z-index: 5;  }
+#cover1-layer{background-image: url("../img/front1.png");}
+#cover2-layer{background-image: url("../img/front2.png");}
+#cover3-layer{background-image: url("../img/front3.png");}
+#cover4-layer{background-image: url("../img/front4.png");}
