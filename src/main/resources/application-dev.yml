@@ -2,16 +2,22 @@ server:
   port: 8080
   tomcat:
     max-http-post-size: 0
+
 # 监听端口和保存路径
 image:
   io:
-    originImagePath: c:/origin/
-    combinedImagePath: c:/combined/
-    printedImagePath: c:/printed/
-    backgroundImagePath: c:/background/
+    originImagePath: /Users/holmes1214/work/pictures/origin/
+    combinedImagePath: /Users/holmes1214/work/pictures/combined/
+    printedImagePath: /Users/holmes1214/work/pictures/printed/
+    backgroundImagePath: /Users/holmes1214/work/pictures/background/
 # 日志设定
 logging:
   level:
     com.sagacn: DEBUG
   config: classpath:logback-dev.xml
+spring:
+  http:
+    multipart:
+      max-file-size: 10mb
+
   

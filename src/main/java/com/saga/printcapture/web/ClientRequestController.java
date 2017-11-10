@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -35,36 +36,17 @@ public class ClientRequestController {
 	private String backgroundPath;
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public @ResponseBody  Object request(@RequestParam("backNumber") String backNumber, @RequestParam("imageData") String image, HttpServletResponse response) throws Exception {
-		response.setHeader("Access-Control-Allow-Headers", "*");
-		String fileName=UUID.randomUUID().toString()+".png";
-		if(StringUtils.isBlank(image)){
+	public @ResponseBody  Object request(@RequestParam("imageData") MultipartFile image,@RequestParam("backNumber") String backNumber,@RequestParam("suffix") String suffix, HttpServletResponse response) throws Exception {
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		if(image.isEmpty()){
 			return null;
 		}
-		Base64.Decoder decoder=Base64.getDecoder();
-		// Base64解码
-		byte[] b = decoder.decode(image);
-		for (int i = 0; i < b.length; ++i) {
-			if (b[i] < 0) {// 调整异常数据
-				b[i] += 256;
-			}
-		}
-
+		String fileName=UUID.randomUUID().toString()+suffix;
+		File dest = new File(savePath + fileName);
+		logger.info("上传的后缀名为：" + fileName);
 		Map<String,String> result=new HashMap<>();
 		try {
-			//获取输出流
-			OutputStream os=new FileOutputStream(savePath+fileName);
-			//获取输入流 CommonsMultipartFile 中可以直接得到文件的流
-			InputStream is=new ByteArrayInputStream(b);
-			int temp=-1;
-			//一个一个字节的读取并写入
-			while((temp=is.read())!=(-1))
-			{
-				os.write(temp);
-			}
-			os.flush();
-			os.close();
-			is.close();
+			image.transferTo(dest);
 			String qrCodeUrl=PrintUtil.combine(combinedPath,savePath,backgroundPath,fileName,backNumber);
 			result.put("qrCode",qrCodeUrl);
 			result.put("fileName",fileName);

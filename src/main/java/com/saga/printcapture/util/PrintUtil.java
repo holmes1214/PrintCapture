@@ -1,5 +1,13 @@
 package com.saga.printcapture.util;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,6 +81,34 @@ public class PrintUtil {
             g.dispose();
             String outFile=combinedPath+fileName;
             ImageIO.write(big, "png", new File(outFile));
+            CloseableHttpClient httpclient = HttpClients.createDefault();
+            try {
+                HttpPost httppost = new HttpPost("http://suspnp.com/snap/upload");
+
+                FileBody bin = new FileBody(new File(outFile));
+
+                HttpEntity reqEntity = MultipartEntityBuilder.create()
+                        .addPart("bin", bin)
+                        .build();
+
+
+                httppost.setEntity(reqEntity);
+
+                CloseableHttpResponse response = httpclient.execute(httppost);
+                try {
+                    logger.info("upload status:{}",response.getStatusLine());
+                    HttpEntity resEntity = response.getEntity();
+                    if (resEntity != null) {
+                        String result = EntityUtils.toString(resEntity);
+                        return result;
+                    }
+                    EntityUtils.consume(resEntity);
+                } finally {
+                    response.close();
+                }
+            } finally {
+                httpclient.close();
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

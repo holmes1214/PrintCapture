@@ -1,6 +1,7 @@
 server:
   port: 8080
-
+  tomcat:
+    max-http-post-size: 0
 # 监听端口和保存路径
 image:
   io:
@@ -13,3 +14,7 @@ logging:
   level:
     com.sagacn: INFO
   config: classpath:logback-prod.xml
+spring:
+  http:
+    multipart:
+      max-file-size: 10mb

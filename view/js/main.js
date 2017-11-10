@@ -43,10 +43,12 @@ function uploadImg() {
         var formData = new FormData();
         formData.append("imageData",blob);
         formData.append("backNumber",backgroundNo);
+        formData.append("suffix",".png");
         $.ajax({
             type: 'POST',
             url:  "http://127.0.0.1:8080/capture/upload",
             data: formData,
+            crossDomain: true,
             processData: false,
             contentType: false,
             success: function (msg) {
