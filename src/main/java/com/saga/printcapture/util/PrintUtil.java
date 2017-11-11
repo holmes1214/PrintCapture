@@ -46,6 +46,7 @@ public class PrintUtil {
                 ps = PrintServiceLookup.lookupDefaultPrintService();
             }
 
+            coppyToPrint(file, printedPath);
             PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
             pras.add(OrientationRequested.PORTRAIT);
 
@@ -58,7 +59,6 @@ public class PrintUtil {
             Doc doc = new SimpleDoc(fin, dof, das);
             DocPrintJob job = ps.createPrintJob();
             job.print(doc, pras);
-            coppyToPrint(file, printedPath);
         } catch (Exception ie) {
             logger.error(ie.getMessage(), ie);
             return false;
