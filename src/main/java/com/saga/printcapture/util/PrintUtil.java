@@ -88,7 +88,7 @@ public class PrintUtil {
             big = rotateImage(big, 90, null);
             big = big.getSubimage(0, 0, big.getWidth() - cutX, big.getHeight() - cutY);
             ImageIO.write(big, "png", new File(outFile));
-            String url = "http://suspnp.com/snap/upload";
+            String url = "http://evtape.com/snap/upload";
             RestTemplate rest = new RestTemplate();
             FileSystemResource resource = new FileSystemResource(new File(outFile));
             MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
