@@ -24,10 +24,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Iterator;
 
 /**
@@ -36,7 +33,7 @@ import java.util.Iterator;
 public class PrintUtil {
     private static Logger logger = LoggerFactory.getLogger(PrintUtil.class);
 
-    public static boolean printImage(File file) {
+    public static boolean printImage(File file, String printedPath) {
         FileInputStream fin = null;
         try {
             DocFlavor dof = DocFlavor.INPUT_STREAM.PNG;
@@ -61,6 +58,7 @@ public class PrintUtil {
             Doc doc = new SimpleDoc(fin, dof, das);
             DocPrintJob job = ps.createPrintJob();
             job.print(doc, pras);
+            coppyToPrint(file, printedPath);
         } catch (Exception ie) {
             logger.error(ie.getMessage(), ie);
             return false;
@@ -73,6 +71,36 @@ public class PrintUtil {
             }
         }
         return true;
+    }
+
+    private static void coppyToPrint(File file, String printedPath) {
+        File dst = new File(printedPath);
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        try {
+            fis = new FileInputStream(file);
+            dst.createNewFile();
+            fos = new FileOutputStream(dst);
+            byte[] buffer = new byte[2048];
+            int count = -1;
+            while ((count = fis.read(buffer)) > 0) {
+                fos.write(buffer, 0, count);
+            }
+        } catch (Exception e) {
+            logger.error("copy error: ", e);
+        } finally {
+            try {
+                if (fis != null) {
+                }
+
+                fis.close();
+
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (IOException e) {
+            }
+        }
     }
 
     public static String combine(String combinedPath, String savePath, String backgroundPath, String fileName, String back, int cutX, int cutY) {

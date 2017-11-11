@@ -80,7 +80,7 @@ public class ClientRequestController {
 	@RequestMapping(value = "/print", method = RequestMethod.POST)
 	public @ResponseBody  Object request(@RequestParam("fileName") String fileName, HttpServletResponse response) throws Exception {
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		if (PrintUtil.printImage(new File(combinedPath+fileName))){
+		if (PrintUtil.printImage(new File(combinedPath+fileName),printedPath+fileName)){
 			return 1;
 		}else {
 			return 0;
