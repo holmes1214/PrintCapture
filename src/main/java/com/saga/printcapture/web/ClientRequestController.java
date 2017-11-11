@@ -2,8 +2,6 @@ package com.saga.printcapture.web;
 
 import com.alibaba.fastjson.JSONObject;
 import com.saga.printcapture.util.PrintUtil;
-import com.sun.deploy.net.HttpResponse;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,8 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.util.Base64;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -36,6 +34,10 @@ public class ClientRequestController {
 	private String printedPath;
 	@Value("${image.io.backgroundImagePath}")
 	private String backgroundPath;
+	@Value("${image.cutX}")
+	private int cutX;
+	@Value("${image.cutY}")
+	private int cutY;
 
 	@PostConstruct
 	public void init(){
@@ -65,7 +67,7 @@ public class ClientRequestController {
 		Map<String,Object> result=new HashMap<>();
 		try {
 			image.transferTo(dest);
-			String qrCodeUrl=PrintUtil.combine(combinedPath,savePath,backgroundPath,fileName,backNumber);
+			String qrCodeUrl=PrintUtil.combine(combinedPath,savePath,backgroundPath,fileName,backNumber,cutX,cutY);
 			result.put("qrCode", JSONObject.parseObject(qrCodeUrl));
 			result.put("fileName",fileName);
 		} catch (FileNotFoundException e) {

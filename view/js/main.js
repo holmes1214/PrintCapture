@@ -7,7 +7,6 @@ $(document).on("click","#frame-button-layer",function () {
 });
 
 $(document).on("click","#capture-button-layer",function () {
-    $("#stream-layer").fadeIn();
     $("#capture-button-layer").fadeOut();
     $("#frame-button-layer").fadeOut();
     $("#countdown-layer").fadeIn();
@@ -72,7 +71,6 @@ function uploadImg() {
 $(document).on("click","#return-to-capture",function () {
     $("#qrcode-layer").fadeOut();
     $("#image-layer").fadeOut();
-    $("#stream-layer").fadeOut();
     $("#capture-button-layer").fadeIn();
     $("#frame-button-layer").fadeIn();
 });
@@ -90,7 +88,6 @@ $(document).on("click","#print-pic",function () {
             $("#printer-layer").fadeOut();
             $("#qrcode-layer").fadeOut();
             $("#image-layer").fadeOut();
-            $("#stream-layer").fadeOut();
             $("#capture-button-layer").fadeIn();
             $("#frame-button-layer").fadeIn();
         },

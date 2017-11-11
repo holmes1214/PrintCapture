@@ -1,13 +1,5 @@
 package com.saga.printcapture.util;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
@@ -16,6 +8,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReadParam;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import javax.print.*;
 import javax.print.attribute.DocAttributeSet;
 import javax.print.attribute.HashDocAttributeSet;
@@ -32,6 +27,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
 
 /**
  * Created by holmes1214 on 08/11/2017.
@@ -40,7 +37,7 @@ public class PrintUtil {
     private static Logger logger = LoggerFactory.getLogger(PrintUtil.class);
 
     public static boolean printImage(File file) {
-        FileInputStream fin=null;
+        FileInputStream fin = null;
         try {
             DocFlavor dof = DocFlavor.INPUT_STREAM.PNG;
 
@@ -67,8 +64,8 @@ public class PrintUtil {
         } catch (Exception ie) {
             logger.error(ie.getMessage(), ie);
             return false;
-        }finally {
-            if (fin!=null){
+        } finally {
+            if (fin != null) {
                 try {
                     fin.close();
                 } catch (IOException e) {
@@ -78,7 +75,7 @@ public class PrintUtil {
         return true;
     }
 
-    public static String combine(String combinedPath, String savePath, String backgroundPath, String fileName, String back) {
+    public static String combine(String combinedPath, String savePath, String backgroundPath, String fileName, String back, int cutX, int cutY) {
         try {
             BufferedImage big = ImageIO.read(new File(savePath + fileName));
             BufferedImage small = ImageIO.read(new File(backgroundPath + back + ".png"));
@@ -89,6 +86,7 @@ public class PrintUtil {
             g.dispose();
             String outFile = combinedPath + fileName;
             big = rotateImage(big, 90, null);
+            big = big.getSubimage(0, 0, big.getWidth() - cutX, big.getHeight() - cutY);
             ImageIO.write(big, "png", new File(outFile));
             String url = "http://suspnp.com/snap/upload";
             RestTemplate rest = new RestTemplate();
@@ -151,4 +149,5 @@ public class PrintUtil {
         op.filter(image, rotatedImage);
         return rotatedImage;
     }
+
 }
