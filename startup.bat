@@ -1,0 +1,1 @@
+java -jar c:\PrintCapture\target\print-capture.jar
