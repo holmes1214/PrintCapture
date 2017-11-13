@@ -5,7 +5,7 @@ server:
 
 # 监听端口和保存路径
 image:
-  cutY: 30
+  cutY: 19
   cutX: 0
   io:
     originImagePath: /Users/holmes1214/work/pictures/origin/

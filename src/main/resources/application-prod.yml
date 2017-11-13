@@ -4,7 +4,7 @@ server:
     max-http-post-size: 0
 # 监听端口和保存路径
 image:
-  cutY: 30
+  cutY: 19
   cutX: 0
   io:
     originImagePath: c:/pictures/origin/
