@@ -47,6 +47,11 @@ public class PrintUtil {
             }
 
             coppyToPrint(file, printedPath);
+
+            if(ps==null){
+                return false;
+            }
+
             PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
             pras.add(OrientationRequested.PORTRAIT);
 
