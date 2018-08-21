@@ -3,7 +3,13 @@
  */
 var backgroundNo="1";
 $(document).on("click","#frame-button-layer",function () {
-    $("#options-layer").fadeIn();
+    $(".cover").fadeOut();
+    if(backgroundNo==="1"){
+        backgroundNo="2";
+    }else {
+        backgroundNo="1";
+    }
+    $("#cover"+backgroundNo+"-layer").fadeIn();
 });
 
 $(document).on("click","#capture-button-layer",function () {
