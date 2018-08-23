@@ -39,11 +39,9 @@ public class PrintUtil {
             DocFlavor dof = DocFlavor.INPUT_STREAM.PNG;
 
             PrintService[] printServices = PrintServiceLookup.lookupPrintServices(dof, null);
-            PrintService ps = null;
-            if (printServices != null && printServices.length > 0) {
+            PrintService ps = PrintServiceLookup.lookupDefaultPrintService();
+            if (ps ==null&& printServices != null && printServices.length > 0) {
                 ps = printServices[0];
-            } else {
-                ps = PrintServiceLookup.lookupDefaultPrintService();
             }
 
             coppyToPrint(file, printedPath);

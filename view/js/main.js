@@ -6,7 +6,9 @@ $(document).on("click","#frame-button-layer",function () {
     $(".cover").fadeOut();
     if(backgroundNo==="1"){
         backgroundNo="2";
-    }else {
+    }else if(backgroundNo==="2"){
+        backgroundNo="3";
+    }else{
         backgroundNo="1";
     }
     $("#cover"+backgroundNo+"-layer").fadeIn();
