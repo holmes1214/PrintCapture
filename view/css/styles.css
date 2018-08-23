@@ -56,8 +56,8 @@
     height: 180px;
     background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;
 }
-.img-back{background-image: url("../img/back.png")}
-.img-bottom{background-image: url("../img/bottom.png")}
+.img-back{}
+.img-bottom{background-image: url("../img/bottom.jpg")}
 .img-qr-back{background-image: url("../img/qr-back.png")}
 .img-return{background-image: url("../img/return.png"); position: absolute;  top: 70px; left: 120px; width: 59px; height: 274px}
 .img-return:active{background-image: url("../img/return-active.png"); }
