@@ -12,4 +12,5 @@ public class PrintCaptureApplication {
 		SpringApplication application = new SpringApplication(PrintCaptureApplication.class);
 		application.run(PrintCaptureApplication.class, args);
 	}
+
 }

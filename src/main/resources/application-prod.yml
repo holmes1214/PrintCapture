@@ -4,7 +4,7 @@ server:
     max-http-post-size: 0
 # 监听端口和保存路径
 image:
-  cutY: 19
+  cutY: 0
   cutX: 0
   io:
     originImagePath: c:/pictures/origin/
@@ -19,4 +19,4 @@ logging:
 spring:
   http:
     multipart:
-      max-file-size: 10mb
+      max-file-size: 20mb

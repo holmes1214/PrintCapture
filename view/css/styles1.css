@@ -1,0 +1,100 @@
+.common {
+    position: absolute;
+    scroll:no;
+}
+
+.top {
+    top: 0;
+    left: 0;
+    width: 1620px;
+    height: 1080px;
+}
+
+.bottom {
+    top: 0;
+    left: 1620px;
+    width: 300px;
+    height: 1080px;
+}
+
+.options {
+    top: 0;
+    left: 1590px;
+    width: 330px;
+    height: 1080px;
+}
+
+.full {
+    top: 0;
+    left: 0;
+    width: 1920px;
+    height: 1080px;
+}
+
+
+.capture-button {
+    left: 700px;
+    top: 480px;
+    width:117px;
+    height:117px;
+}
+
+.countdown {
+    left: 540px;
+    top: 154px;
+    width:716px;
+    height:772px;
+}
+#bottom-layer{
+    overflow: hidden;
+    clear: both;
+}
+.option{
+    width: 140px;
+    height: 99px;
+    background-size: 100% 100%;
+    float: left;
+    margin: 40px 5px;
+}
+.img-bottom{background-color: #444444;}
+.img-qr-back{background-image: url("../img/qr-back.png")}
+.img-return{background-image: url("../img/return.png"); position: absolute;  top: 70px; left: 13px; width: 274px; height: 59px}
+.img-return:active{background-image: url("../img/return-active.png"); }
+.qr-code{position: absolute;top: 650px; left: 75px; width: 150px; height: 150px}
+.img-qr-comment{background-image: url("../img/qrcomment.png");position: absolute;  top: 500px; left: 13px; width: 274px; height: 59px}
+.img-print{background-image: url("../img/print.png"); position: absolute; top: 200px; left: 13px; width: 274px; height: 59px}
+.img-print:active{background-image: url("../img/print-active.png"); }
+.img-option1{ background-image: url("../img/stamp1.png");}
+.img-option2{ background-image: url("../img/stamp2.png");}
+.img-option3{ background-image: url("../img/stamp3.png");}
+.img-option4{ background-image: url("../img/stamp4.png");}
+.img-option5{ background-image: url("../img/stamp5.png");}
+.img-option6{ background-image: url("../img/stamp6.png");}
+.img-option7{ background-image: url("../img/stamp7.png");}
+.img-option8{ background-image: url("../img/stamp8.png");}
+.img-option9{ background-image: url("../img/stamp9.png");}
+.img-option0{ background-image: url("../img/stamp0.png");}
+.img-option10{ background-image: url("../img/stamp10.png");}
+.img-option11{ background-image: url("../img/stamp11.png");}
+.img-capture-button{background-image: url("../img/capture.png")}
+.img-frame-button:active{background-image: url("../img/frame-active.png")}
+.img-capture-button:active{background-image: url("../img/capture-active.png")}
+.visible{ display: block}
+.invisible{ display: none}
+.sequence-1{  z-index: 1;  }
+.sequence-2{  z-index: 2;  }
+.sequence-3{  z-index: 3;  }
+.sequence-4{  z-index: 4;  }
+.sequence-5{  z-index: 5;  }
+#cover1-layer{background: url("../img/front-1.png") no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;}
+#cover2-layer{background: url("../img/front-2.png") no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;}
+#cover3-layer{background: url("../img/front-3.png") no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;}
+#cover4-layer{background: url("../img/front-4.png") no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;}
+#cover5-layer{background: url("../img/front-5.png") no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;}
+#cover6-layer{background: url("../img/front-6.png") no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;}
+#cover7-layer{background: url("../img/front-7.png") no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;}
+#cover8-layer{background: url("../img/front-8.png") no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;}
+#cover9-layer{background: url("../img/front-9.png") no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;}
+#cover0-layer{background: url("../img/front-0.png") no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;}
+#cover10-layer{background: url("../img/front-10.png") no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;}
+#cover11-layer{background: url("../img/front-11.png") no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;}

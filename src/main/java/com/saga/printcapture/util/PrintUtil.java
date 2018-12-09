@@ -1,5 +1,14 @@
 package com.saga.printcapture.util;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
@@ -8,9 +17,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReadParam;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 import javax.print.*;
 import javax.print.attribute.DocAttributeSet;
 import javax.print.attribute.HashDocAttributeSet;
@@ -25,6 +31,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -44,7 +51,7 @@ public class PrintUtil {
                 ps = printServices[0];
             }
 
-            coppyToPrint(file, printedPath);
+            copyToPrint(file, printedPath);
 
             if(ps==null){
                 return false;
@@ -57,7 +64,7 @@ public class PrintUtil {
             pras.add(PrintQuality.HIGH);
             DocAttributeSet das = new HashDocAttributeSet();
             // 设置打印纸张的大小（以毫米为单位）
-            das.add(new MediaPrintableArea(0, 0, 102, 152, MediaPrintableArea.MM));
+            das.add(new MediaPrintableArea(0f, 0f, 102f, 152f, MediaPrintableArea.MM));
             fin = new FileInputStream(file);
             Doc doc = new SimpleDoc(fin, dof, das);
             DocPrintJob job = ps.createPrintJob();
@@ -76,7 +83,7 @@ public class PrintUtil {
         return true;
     }
 
-    private static void coppyToPrint(File file, String printedPath) {
+    private static void copyToPrint(File file, String printedPath) {
         File dst = new File(printedPath);
         FileInputStream fis = null;
         FileOutputStream fos = null;
@@ -106,6 +113,7 @@ public class PrintUtil {
         }
     }
 
+
     public static String combine(String combinedPath, String savePath, String backgroundPath, String fileName, String back, int cutX, int cutY) {
         try {
             BufferedImage big = ImageIO.read(new File(savePath + fileName));
@@ -119,17 +127,18 @@ public class PrintUtil {
             big = rotateImage(big, 90, null);
             big = big.getSubimage(0, 0, big.getWidth() - cutX, big.getHeight() - cutY);
             ImageIO.write(big, "png", new File(outFile));
-            String url = "http://evtape.com/snap/upload";
-            RestTemplate rest = new RestTemplate();
+            String url = "http://siemens.sagacn.com/snap/upload";
+            RestTemplate restTemplate=new RestTemplate();
             FileSystemResource resource = new FileSystemResource(new File(outFile));
             MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
             param.add("file", resource);
-            String result = rest.postForObject(url, param, String.class);
+            String result = restTemplate.postForObject(url, param, String.class);
             return result;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
 
     public static BufferedImage rotateImage(final BufferedImage image,
                                             int degree, Color bgcolor) {
